@@ -1,0 +1,28 @@
+create table Publishers(
+PublisherName varchar(30),
+PublisherAddress varchar(30),
+PublisherPhone varchar(30),
+PublisherEmail varchar(30),
+constraint Publishers_pk primary key(PublisherName)
+);
+
+
+create table WritingGroups(
+GroupName varchar(30),
+HeadWriter varchar(30),
+YearFormed date NOT NULL,
+Subject varchar(30),
+constraint WritingGroups_pk primary key(GroupName)
+);
+
+create table Books(
+GroupName varchar(30),
+BookTitle varchar(30),
+PublisherName varchar(30),
+YearPublished date,
+NumberPages int,
+constraint Books_ibfk_1 foreign key(GroupName)references WritingGroups(GroupName),
+constraint Publisher_ibfk_2 foreign key(PublisherName) references Publishers(PublisherName),
+constraint Books_idx_1 unique (BookTitle, PublisherName),
+constraint Books_pk primary key(GroupName, BookTitle)
+);
