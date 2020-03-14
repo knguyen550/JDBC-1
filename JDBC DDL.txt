@@ -1,28 +1,46 @@
 create table Publishers(
-PublisherName varchar(30),
-PublisherAddress varchar(30),
-PublisherPhone varchar(30),
-PublisherEmail varchar(30),
+PublisherName varchar(30) not null,
+PublisherAddress varchar(80)not null,
+PublisherPhone varchar(30) not null,
+PublisherEmail varchar(30) not null,
 constraint Publishers_pk primary key(PublisherName)
 );
 
 
 create table WritingGroups(
-GroupName varchar(30),
-HeadWriter varchar(30),
+GroupName varchar(30) not null,
+HeadWriter varchar(30) not null,
 YearFormed date NOT NULL,
-Subject varchar(30),
+Subject varchar(30) not null,
 constraint WritingGroups_pk primary key(GroupName)
 );
 
 create table Books(
-GroupName varchar(30),
-BookTitle varchar(30),
-PublisherName varchar(30),
-YearPublished date,
-NumberPages int,
+GroupName varchar(30) not null,
+BookTitle varchar(30) not null,
+PublisherName varchar(30) not null,
+YearPublished date not null,
+NumberPages int not null,
 constraint Books_ibfk_1 foreign key(GroupName)references WritingGroups(GroupName),
 constraint Publisher_ibfk_2 foreign key(PublisherName) references Publishers(PublisherName),
 constraint Books_idx_1 unique (BookTitle, PublisherName),
 constraint Books_pk primary key(GroupName, BookTitle)
 );
+
+insert into 
+writinggroups(GroupName,HeadWriter,YearFormed,Subject) values
+('Book Bois','Andre Cortes','1/3/2019','Literature'),
+('Learn Math', 'Kevin', '2/5/2018', 'Math'),
+('Creative Writers', 'Justin', '5/13/2017', 'Fiction'); 
+
+insert into 
+publishers(PublisherName,PublisherAddress,PublisherPhone,PublisherEmail) values
+('Macmillian', '1641 Edinger Ave # 102, Tustin, CA 92780','7148135203','macmill317@gmail.com'),
+('Crown Publishing', '3131 Warner, GardenGrove,CA 92381','9496530963','crown32@hotmail.com'),
+('Random Publishing','1212 Madeup rd,lalaland,CA 12345', '7141234567','random15@yahoo.com');
+
+insert into 
+books(GroupName,BookTitle,PublisherName,YearPublished,NumberPages)values
+('Book Bois','Harry Potter','Macmillian','3/1/2019',634),
+('Learn Math','Calculus 2', 'Crown Publishing','1/1/2018',1000),
+('Creative Writers', 'Making it up', 'Random Publishing', '4/2/2018',150);
