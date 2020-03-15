@@ -10,5 +10,5 @@ To add changes <br/>
   *3. make pull request<space><space>*<space><br/>
   *4. then send it and i will comfirm it<space><space>*<space><br/>
 2b. Click the fork option(top right, this will make a copy of the project on your github)<br/>
-  1. Go back to your github and pick the project<br/>
-  2. Pick the file and then just follow step 2a<br/>
+  *1. Go back to your github and pick the project <space><space>*<space><br/>
+  *2. Pick the file and then just follow step 2a <space><space>*<space><br/>
