@@ -12,4 +12,3 @@ To add changes
 2b. Click the fork option(top right, this will make a copy of the project on your github)
   1. Go back to your github and pick the project
   2. Pick the file and then just follow step 2a
- -
