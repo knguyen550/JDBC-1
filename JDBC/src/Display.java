@@ -36,58 +36,52 @@ public class Display {
         System.out.println("9. Remove Book");
         System.out.println("10. end");
         
-        int choice = scan.nextInt();
+        int choice = getIntRange(1,10);
+        switch (choice) {
+            case 1:
+                printWritingsGroups();
+                break;
+            case 2:
+                chooseWritingGroups();
+                break;
+            case 3:
+                printPublishers();
+                break;
+            case 4:
+                choosePublisher();
+                break;
+            case 5:
+                printBooks();
+                break;
+            case 6:
+                chooseBooks();
+                break;
+            case 7:
+                insertBook();
+                break;
+            case 8:
+                insertPublisher();
+                break;
+            case 9:
+                removeBook();
+                break;
+            default:
+                break;
+        }        
         System.out.println("\n");
-        if(validChoice(1,10,choice)){
-            switch (choice) {
-                case 1:
-                    printWritingsGroups();
-                    break;
-                case 2:
-                    chooseWritingGroups();
-                    break;
-                case 3:
-                    printPublishers();
-                    break;
-                case 4:
-                    choosePublisher();
-                    break;
-                case 5:
-                    printBooks();
-                    break;
-                case 6:
-                    chooseBooks();
-                    break;
-                case 7:
-                    insertBook();
-                    break;
-                case 8:
-                    insertPublisher();
-                    break;
-                case 9:
-                    removeBook();
-                    break;
-                default:
-                    break;
-            }
-        }else{
-            System.out.println("Please enter a valid choice");
-            mainDis();
-        }
-        
     }
     void printWritingsGroups()
     {
         String sql = "SELECT GroupName FROM WritingGroups";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs != null){
-            System.out.println("Writing Group Names: ");
-            while(rs.next())
-            {
-                String names = rs.getString("GroupName");
-                System.out.println(names);
-            }
+            if(rs.next()){
+                System.out.println("Writing Group Names: ");
+                
+                do{
+                    String names = rs.getString("GroupName");
+                    System.out.println(names);
+                }while(rs.next());
             }
             else
                 System.out.println("\nSorry, there are no Writing Groups in your database\n");
@@ -107,13 +101,12 @@ public class Display {
      
        String sql = "SELECT * FROM WritingGroups WHERE GroupName = '" + name + "'";
         try{
-            //PreparedStatement stmt1 = conn.prepareStatement(sql);
-            //stmt1.setString(1,name);
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
-            if(rs != null){
-                while(rs.next())
-                {
+            
+            if(rs.next()){
+                System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
+                
+                do{
                     String gName = rs.getString("GroupName");
                     String writer = rs.getString("HeadWriter");
                     String year = rs.getString("YearFormed");
@@ -122,7 +115,7 @@ public class Display {
                     //Display values
                     System.out.printf(displayFormat, 
                             dispNull(gName), dispNull(writer), dispNull(year), dispNull(subject));
-                }
+                }while(rs.next());
             }
             else
                 System.out.println("Sorry, there are no Writing Groups in your database");
@@ -134,20 +127,8 @@ public class Display {
         System.out.println("2. Try again");
         System.out.println("3. Exit");
         
-        int choice = 0;
-        while(!scan.hasNextInt())
-        {
-            choice = scan.nextInt();
-        }
-        choice  = scan.nextInt();
-        while(!validChoice(1,3,choice))
-        {
-            System.out.println("\nEnter a valid choice\n");
-            System.out.println("\n1. Back to main menu");
-            System.out.println("2. Try again");
-            System.out.println("3. Exit");
-            choice = scan.nextInt();
-        }
+        int choice = getIntRange(1,3);
+        
         System.out.println("\n");
         if(choice == 1)
             mainDis();
@@ -164,22 +145,37 @@ public class Display {
             return input;
     }
     //checks if values are between low and high
-    boolean validChoice(int low, int high, int choice)
-    {
-        return (choice >= low && choice <= high);
+    int getIntRange( int low, int high ) {
+        Scanner in = new Scanner( System.in );
+        int input = 0;
+        boolean valid = false;
+        while( !valid ) {
+                if( in.hasNextInt() ) {
+                        input = in.nextInt();
+                        if( input <= high && input >= low ) {
+                                valid = true;
+                        } else {
+                                System.out.println( "Invalid Range." );
+                        }
+                } else {
+                        in.next(); //clear invalid string
+                        System.out.println( "Invalid Input." );
+                }
+        }
+        return input;
     }
     void printPublishers()
     {
         String sql = "SELECT PublisherName FROM Publishers";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs != null){
+            if(rs.next()){
                 System.out.println("Publisher Names: ");
-                while(rs.next())
-                {
+                
+                do{
                     String names = rs.getString("PublisherName");
                     System.out.println(names);
-                }
+                }while(rs.next());
             }
             else
                 System.out.println("Sorry, there are no Publishers in your database");
@@ -199,10 +195,10 @@ public class Display {
        String sql = "SELECT  * FROM Publishers WHERE PublisherName = '" + name +"'";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs != null){
+            if(rs.next()){
                 System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email");
-                while(rs.next())
-                {
+                
+                do{
                     String gName = rs.getString("PublisherName");
                     String writer = rs.getString("PublisherAddress");
                     String year = rs.getString("PublisherPhone");
@@ -211,7 +207,7 @@ public class Display {
                     //Display values
                     System.out.printf(displayFormat, 
                             dispNull(gName), dispNull(writer), dispNull(year), dispNull(subject));
-                }
+                }while(rs.next());
             }
             else
                 System.out.println("Sorry, there are no Writing Groups in your database");
@@ -222,20 +218,9 @@ public class Display {
         System.out.println("\n\n1. Back to main menu");
         System.out.println("2. Try again");
         System.out.println("3. Exit");
-        int choice = 0;
-        while(!scan.hasNextInt())
-        {
-            choice = scan.nextInt();
-        }
-        choice  = scan.nextInt();
-        while(!validChoice(1,3,choice))
-        {
-            System.out.println("\nEnter a valid choice\n");
-            System.out.println("\n1. Back to main menu");
-            System.out.println("2. Try again");
-            System.out.println("3. Exit");
-            choice = scan.nextInt();
-        }
+        
+        int choice = getIntRange(1,3);
+        
         System.out.println("\n");
         if(choice == 1)
             mainDis();
@@ -247,13 +232,14 @@ public class Display {
         String sql = "SELECT BookTitle FROM Books";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs != null){
+            if(rs.next()){
                 System.out.println("Book Names: ");
-                while(rs.next())
-                {
+                do{
                     String names = rs.getString("BookTitle");
                     System.out.println(names);
                 }
+                while(rs.next());
+                
             }
             else
                 System.out.println("Sorry, there are no Books in your database");
@@ -274,7 +260,7 @@ public class Display {
     }
     void insertPublisher()
     {
-        //edit
+        
     }
     void removeBook()
     {
