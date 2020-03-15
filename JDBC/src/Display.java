@@ -13,11 +13,13 @@ import java.util.Scanner;
 public class Display {
     Scanner scan = new Scanner(System.in);
     Statement stmt = null;
-    static final String displayFormat="%-5s%-15s%-15s%-15s\n";
+    Connection conn = null;
+    static final String displayFormat="%-15s%-15s%-15s%-15s\n";
     
-    Display(Statement state)
+    Display(Statement state, Connection con)
     {
         stmt = state;
+        conn = con;
         mainDis();
     }
     void mainDis()
@@ -35,6 +37,7 @@ public class Display {
         System.out.println("10. end");
         
         int choice = scan.nextInt();
+        System.out.println("\n");
         if(validChoice(1,10,choice)){
             switch (choice) {
                 case 1:
@@ -78,30 +81,37 @@ public class Display {
         String sql = "SELECT GroupName FROM WritingGroups";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs.getFetchSize() > 0){
-                System.out.println("Writing Group Names: ");
-                while(rs.next())
-                {
-                    String names = rs.getString("GroupName");
-                    System.out.println(names);
-                }
+            if(rs != null){
+            System.out.println("Writing Group Names: ");
+            while(rs.next())
+            {
+                String names = rs.getString("GroupName");
+                System.out.println(names);
+            }
             }
             else
-                System.out.println("Sorry, there are no Writing Groups in your database");
+                System.out.println("\nSorry, there are no Writing Groups in your database\n");
         }
         catch(SQLException err){
             System.out.println(err.getMessage());
         }
+        System.out.println("\n");
+        mainDis();
     }
     void chooseWritingGroups()
     {
        System.out.println("Enter the Writing Group Name you wish to find");
-       String name = scan.next();
-       String sql = "SELECT  * FROM WritingGroups WHERE GroupName = '" + name +"'";
+       String name = "";
+       scan = scan.useDelimiter("\n");
+       name = scan.next();
+     
+       String sql = "SELECT * FROM WritingGroups WHERE GroupName = '" + name + "'";
         try{
+            //PreparedStatement stmt1 = conn.prepareStatement(sql);
+            //stmt1.setString(1,name);
             ResultSet rs = stmt.executeQuery(sql);
             System.out.printf(displayFormat, "Group Name", "Head Writer", "Year Formed", "Subject");
-            if(rs.getFetchSize() > 0){
+            if(rs != null){
                 while(rs.next())
                 {
                     String gName = rs.getString("GroupName");
@@ -123,13 +133,22 @@ public class Display {
         System.out.println("\n\n1. Back to main menu");
         System.out.println("2. Try again");
         System.out.println("3. Exit");
-        int choice = scan.nextInt();
         
-        while(!validChoice(1,3,choice))
+        int choice = 0;
+        while(!scan.hasNextInt())
         {
-            System.out.println("Enter a valid choice");
             choice = scan.nextInt();
         }
+        choice  = scan.nextInt();
+        while(!validChoice(1,3,choice))
+        {
+            System.out.println("\nEnter a valid choice\n");
+            System.out.println("\n1. Back to main menu");
+            System.out.println("2. Try again");
+            System.out.println("3. Exit");
+            choice = scan.nextInt();
+        }
+        System.out.println("\n");
         if(choice == 1)
             mainDis();
         else if(choice == 2)
@@ -154,7 +173,7 @@ public class Display {
         String sql = "SELECT PublisherName FROM Publishers";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs.getFetchSize() > 0){
+            if(rs != null){
                 System.out.println("Publisher Names: ");
                 while(rs.next())
                 {
@@ -168,16 +187,20 @@ public class Display {
         catch(SQLException err){
             System.out.println(err.getMessage());
         }
+        System.out.println("\n");
+        mainDis();
     }
     void choosePublisher()
     {
-       System.out.println("Enter the Writing Group Name you wish to find");
-       String name = scan.next();
+       System.out.println("Enter the Publisher Name you wish to find");
+       String name = "";
+       scan = scan.useDelimiter("\n");
+       name = scan.next();
        String sql = "SELECT  * FROM Publishers WHERE PublisherName = '" + name +"'";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email");
-            if(rs.getFetchSize() > 0){
+            if(rs != null){
+                System.out.printf(displayFormat, "Publisher Name", "Publisher Address", "Publisher Phone", "Publisher Email");
                 while(rs.next())
                 {
                     String gName = rs.getString("PublisherName");
@@ -199,13 +222,21 @@ public class Display {
         System.out.println("\n\n1. Back to main menu");
         System.out.println("2. Try again");
         System.out.println("3. Exit");
-        int choice = scan.nextInt();
-        
-        while(!validChoice(1,3,choice))
+        int choice = 0;
+        while(!scan.hasNextInt())
         {
-            System.out.println("Enter a valid choice");
             choice = scan.nextInt();
         }
+        choice  = scan.nextInt();
+        while(!validChoice(1,3,choice))
+        {
+            System.out.println("\nEnter a valid choice\n");
+            System.out.println("\n1. Back to main menu");
+            System.out.println("2. Try again");
+            System.out.println("3. Exit");
+            choice = scan.nextInt();
+        }
+        System.out.println("\n");
         if(choice == 1)
             mainDis();
         else if(choice == 2)
@@ -216,7 +247,7 @@ public class Display {
         String sql = "SELECT BookTitle FROM Books";
         try{
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs.getFetchSize() > 0){
+            if(rs != null){
                 System.out.println("Book Names: ");
                 while(rs.next())
                 {
@@ -230,6 +261,8 @@ public class Display {
         catch(SQLException err){
             System.out.println(err.getMessage());
         }
+        System.out.println("\n");
+        mainDis();
     }
     void chooseBooks()
     {
