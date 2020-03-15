@@ -12,3 +12,8 @@ To add changes <br/>
 2b. Click the fork option(top right, this will make a copy of the project on your github)<br/>
   *1. Go back to your github and pick the project <space><space>*<space><br/>
   *2. Pick the file and then just follow step 2a <space><space>*<space><br/>
+<pre>
+hello, this is
+   just an     example
+....
+</pre>
