@@ -43,9 +43,13 @@ public class CECS323JavaTermProject {
         //If your database has no credentials, you can update this code to 
         //remove that from the connection string.
         Scanner in = new Scanner(System.in);
+        
         System.out.print("Name of the database (not the user account): ");
         DBNAME = in.nextLine();
         System.out.print("Database user name: ");
+        USER = in.nextLine();
+        System.out.print("Database Password: ");
+        PASS = in.nextLine();
         //Constructing the database URL connection string
         DB_URL = DB_URL + DBNAME;
         Connection conn = null; //initialize the connection
@@ -56,35 +60,18 @@ public class CECS323JavaTermProject {
 
             //STEP 3: Open a connection
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL);
-
-            //STEP 4: Execute a query
-            System.out.println("Creating statement...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            
+                     
             stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT au_id, au_fname, au_lname, phone FROM Authors";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            //STEP 5: Extract data from result set
-            System.out.printf(displayFormat, "ID", "First Name", "Last Name", "Phone #");
-            while (rs.next()) {
-                //Retrieve by column name
-                String id = rs.getString("au_id");
-                String phone = rs.getString("phone");
-                String first = rs.getString("au_fname");
-                String last = rs.getString("au_lname");
-
-                //Display values
-                System.out.printf(displayFormat, 
-                        dispNull(id), dispNull(first), dispNull(last), dispNull(phone));
-            }
-            //STEP 6: Clean-up environment
-            rs.close();
+            Display newproj = new Display(stmt,conn);
+                       
             stmt.close();
             conn.close();
+            
         } catch (SQLException se) {
             //Handle errors for JDBC
-            se.printStackTrace();
+            System.out.println(se.getMessage());
         } catch (Exception e) {
             //Handle errors for Class.forName
             e.printStackTrace();
