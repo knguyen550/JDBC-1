@@ -254,10 +254,30 @@ public class Display {
     {
         
     }
-    void insertBook()
-    {
-        
-    }
+	
+    //this one doesn't need user input so can take it out from menu i think?
+	public void insert(String GroupName, String BookTitle, String PublisherName, String YearPublished, int NumberPages)
+	{
+
+		Connection conn = null;
+
+		String stmt = "INSERT INTO Books(GroupName,BookTitle,PublisherName,YearPublished,NumberPages) VALUES(?, ?, ?, ?, ?)";
+		try{
+			
+			conn = DriverManager.getConnection(DB_URL);
+			PreparedStatement pstmt = conn.prepareStatement(stmt);
+
+			pstmt.setString(1, GroupName);
+			pstmt.setString(2, BookTitle);
+			pstmt.setString(3, PublisherName);
+			pstmt.setString(4, YearPublished);
+			pstmt.setInt(5, NumberPages);
+			pstmt.executeUpdate();
+			} catch (SQLException e) {
+	            System.out.println(e.getMessage());
+			}
+	}
+		
     void insertPublisher()
     {
         
